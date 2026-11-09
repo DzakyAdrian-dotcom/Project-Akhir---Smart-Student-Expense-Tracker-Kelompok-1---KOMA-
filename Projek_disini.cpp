@@ -40,30 +40,12 @@ void AddData(transaksi data[], int &n) {
     transaksi t; 
     cout << "\n============ TAMBAH TRANSAKSI ============\n";
 
-    // Input ID
-    while (true) {
-        cout << "ID Transaksi (tanpa spasi): ";
-        cin >> t.ID;
-
-        bool duplikat = false;
-        for (int i = 0; i < n; i++) {
-            if (data[i].ID == t.ID) {
-                duplikat = true;
-                break;
-            }
-        }
-        if (duplikat) {
-            cout << "[!] ID sudah dipakai, gunakan ID lain.\n";
-        } else {
-            break;
-        }
-    }
-
     // Input Kategori
     cout << "======== Pilih Kategori ========" << endl;
     for (int i = 0; i < NUM_CAT; i++) {
         cout << "  " << i + 1 << ". " << CATEGORIES[i] << endl;
     }
+
     int pilih;
     while (true) {
         cout << "Pilih kategori [1-" << NUM_CAT << "]: ";
@@ -77,7 +59,22 @@ void AddData(transaksi data[], int &n) {
     }
     t.kategori = CATEGORIES[pilih - 1];
 
-        // 3. Input pengeluaran
+    // Otomatisasi ID Berdasarkan Kategori
+    char huruf = 'A' + (pilih - 1);
+    int urutan = 1;
+    for (int i = 0; i < n; i++) {
+        if (data[i].kategori == t.kategori) {
+            urutan++;
+        }
+    }
+    t.ID = string(1, huruf);
+    if (urutan < 10){ 
+        t.ID += "0"; 
+    }
+    t.ID += to_string(urutan);
+
+
+        // Input pengeluaran
     while (true) {
         cout << "Nominal pengeluaran (Rp): ";
         if (cin >> t.pengeluaran && t.pengeluaran > 0) {
