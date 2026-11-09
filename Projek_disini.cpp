@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -120,14 +122,13 @@ void DisplayData(const transaksi data[], int n) {
 // Fungsi menghitung total, rata-rata, pengeluaran tertinggi, dan pengeluaran terendah
 void CalculateSummary(const transaksi data[], int n) {
     // TODO [Anggota 3]: Hitung total, mean, max, dan min pengeluaran
-    int Total_Pengeluaran = 0;
+    int Total_Pengeluaran = TotalRekursif(data, n);
     float average = 0;
     int Index_Pengeluaran_Tertinggi = 0;
     int Index_Pengeluaran_Terendah = 0;
     int Pengeluaran_Tertinggi = data[0].pengeluaran;
     int Pengeluaran_Terendah = data[0].pengeluaran;
     for (int i = 0; i < n; i++) {
-        Total_Pengeluaran += data[i].pengeluaran;
         if (data[i].pengeluaran > Pengeluaran_Tertinggi) {
             Pengeluaran_Tertinggi = data[i].pengeluaran;
             Index_Pengeluaran_Tertinggi = i;
@@ -139,7 +140,7 @@ void CalculateSummary(const transaksi data[], int n) {
         }
     }
     average = float(Total_Pengeluaran)/ n;
-    cout << "======== Ringkasan Keuangan ========" << endl;
+    cout << "\n=========== Ringkasan Keuangan ===========\n";
     cout << "Total Pengeluaran = " << Total_Pengeluaran << endl;
     cout << "Rata-rata Pengeluaran = " << average << endl;
     cout << "===== Pengeluaran Tertinggi ===== " << endl;
@@ -150,18 +151,25 @@ void CalculateSummary(const transaksi data[], int n) {
     cout << "ID Transaksi = " << data[Index_Pengeluaran_Terendah].ID << endl;
     cout << "Kategori Transaksi = " << data[Index_Pengeluaran_Terendah].kategori << endl;
     cout << "Besar Pengeluaran = " << Pengeluaran_Terendah << endl;
-    cout << "\n--> [Fitur CalculateSummary: Sedang dikerjakan oleh Anggota 3]\n";
+    cout << "==========================================\n";
+    //cout << "\n--> [Fitur CalculateSummary: Sedang dikerjakan oleh Anggota 3]\n";
 }
 
 // Fungsi hitung total pengeluaran setiap kategori
 void PengeluaranKategori(const transaksi data[], int n) {
     // TODO [Anggota 3]: Akumulasi pengeluaran per kategori & cari kategori terbesar
+    // Variabel total pengeluaran setiap kategori
     int Total_Pengeluaran_Food = 0;
     int Total_Pengeluaran_Transportation = 0;
     int Total_Pengeluaran_Academic = 0;
     int Total_Pengeluaran_Entertainment = 0;
     int Total_Pengeluaran_Shopping = 0;
     int Total_Pengeluaran_Other = 0;
+    struct Kategori {
+        string nama;
+        int total;
+    };
+
     for (int i = 0; i < n; i++) {
         if (data[i].kategori == "Food") {
             Total_Pengeluaran_Food += data[i].pengeluaran;
@@ -179,9 +187,30 @@ void PengeluaranKategori(const transaksi data[], int n) {
             } 
         } 
     }
-    cout << "====== Total Pengeluaran Tiap Kategori ======" << endl;
+    vector<Kategori> Daftar_Pengeluaran = {{"Makanan", Total_Pengeluaran_Food},
+    {"Transportasi", Total_Pengeluaran_Transportation},
+    {"Akademik", Total_Pengeluaran_Academic},
+    {"Hiburan", Total_Pengeluaran_Entertainment},
+    {"Belanja", Total_Pengeluaran_Shopping},
+    {"Lainnya", Total_Pengeluaran_Other}};
+    // Mencari kategori dengan pengeluaran terbesar
+    Kategori Terbesar = Daftar_Pengeluaran[0];
+    for (int i = 0; i < 6; i++) {
+        if(Daftar_Pengeluaran[i].total > Terbesar.total) {
+            Terbesar = Daftar_Pengeluaran[i];
+        }
+    }
+    int Kategori_Pengeluaran_Terbesar;
+    cout << "\n========== Total Pengeluaran Tiap Kategori ==========\n";
     cout << "Total Pengeluaran Kategori Makanan = " << Total_Pengeluaran_Food << endl;
-    cout << "\n--> [Fitur PengeluaranKategori: Sedang dikerjakan oleh Anggota 3]\n";
+    cout << "Total Pengeluaran Kategori Transportasi = " << Total_Pengeluaran_Transportation << endl;
+    cout << "Total Pengeluaran Kategori Akademik = " << Total_Pengeluaran_Academic << endl;
+    cout << "Total Pengeluaran Kategori Hiburan = " << Total_Pengeluaran_Entertainment << endl;
+    cout << "Total Pengeluaran Kategori Belanja = " << Total_Pengeluaran_Shopping << endl;
+    cout << "Total Pengeluaran Kategori Lainnya = " << Total_Pengeluaran_Other << endl;
+    cout << "Kategori dengan Pengeluaran Terbesar = " << Terbesar.nama << endl;
+    cout << "=====================================================\n";
+    // cout << "\n--> [Fitur PengeluaranKategori: Sedang dikerjakan oleh Anggota 3]\n";
 }
 
 // Fungsi pembantu menghitung total pengeluaran secara rekursif (Wajib Rekursi)
