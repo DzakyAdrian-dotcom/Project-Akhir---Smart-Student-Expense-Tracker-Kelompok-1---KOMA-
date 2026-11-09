@@ -46,12 +46,67 @@ void DisplayData(const transaksi data[], int n) {
 // Fungsi menghitung total, rata-rata, pengeluaran tertinggi, dan pengeluaran terendah
 void CalculateSummary(const transaksi data[], int n) {
     // TODO [Anggota 3]: Hitung total, mean, max, dan min pengeluaran
+    int Total_Pengeluaran = 0;
+    float average = 0;
+    int Index_Pengeluaran_Tertinggi = 0;
+    int Index_Pengeluaran_Terendah = 0;
+    int Pengeluaran_Tertinggi = data[0].pengeluaran;
+    int Pengeluaran_Terendah = data[0].pengeluaran;
+    for (int i = 0; i < n; i++) {
+        Total_Pengeluaran += data[i].pengeluaran;
+        if (data[i].pengeluaran > Pengeluaran_Tertinggi) {
+            Pengeluaran_Tertinggi = data[i].pengeluaran;
+            Index_Pengeluaran_Tertinggi = i;
+        } else {
+            if (data[i].pengeluaran < Pengeluaran_Terendah) {
+                Pengeluaran_Terendah = data[i].pengeluaran;
+                Index_Pengeluaran_Terendah = i;
+            }
+        }
+    }
+    average = float(Total_Pengeluaran)/ n;
+    cout << "======== Ringkasan Keuangan ========" << endl;
+    cout << "Total Pengeluaran = " << Total_Pengeluaran << endl;
+    cout << "Rata-rata Pengeluaran = " << average << endl;
+    cout << "===== Pengeluaran Tertinggi ===== " << endl;
+    cout << "ID Transaksi = " << data[Index_Pengeluaran_Tertinggi].ID << endl;
+    cout << "Kategori Transaksi = " << data[Index_Pengeluaran_Tertinggi].kategori << endl;
+    cout << "Besar Pengeluaran = " << Pengeluaran_Tertinggi << endl;
+    cout << "===== Pengeluaran Terendah ====== " << endl;
+    cout << "ID Transaksi = " << data[Index_Pengeluaran_Terendah].ID << endl;
+    cout << "Kategori Transaksi = " << data[Index_Pengeluaran_Terendah].kategori << endl;
+    cout << "Besar Pengeluaran = " << Pengeluaran_Terendah << endl;
     cout << "\n--> [Fitur CalculateSummary: Sedang dikerjakan oleh Anggota 3]\n";
 }
 
 // Fungsi hitung total pengeluaran setiap kategori
 void PengeluaranKategori(const transaksi data[], int n) {
     // TODO [Anggota 3]: Akumulasi pengeluaran per kategori & cari kategori terbesar
+    int Total_Pengeluaran_Food = 0;
+    int Total_Pengeluaran_Transportation = 0;
+    int Total_Pengeluaran_Academic = 0;
+    int Total_Pengeluaran_Entertainment = 0;
+    int Total_Pengeluaran_Shopping = 0;
+    int Total_Pengeluaran_Other = 0;
+    for (int i = 0; i < n; i++) {
+        if (data[i].kategori == "Food") {
+            Total_Pengeluaran_Food += data[i].pengeluaran;
+        } else if (data[i].kategori == "Transportation") {
+            Total_Pengeluaran_Transportation += data[i].pengeluaran;
+        } else if (data[i].kategori == "Academic") {
+            Total_Pengeluaran_Academic += data[i].pengeluaran;
+        } else if (data[i].kategori == "Entertainment") {
+            Total_Pengeluaran_Entertainment += data[i].pengeluaran;
+        } else if (data[i].kategori == "Shopping") {
+            Total_Pengeluaran_Shopping += data[i].pengeluaran;
+        } else  {
+            if (data[i].kategori == "Other") {
+                Total_Pengeluaran_Other += data[i].pengeluaran;
+            } 
+        } 
+    }
+    cout << "====== Total Pengeluaran Tiap Kategori ======" << endl;
+    cout << "Total Pengeluaran Kategori Makanan = " << Total_Pengeluaran_Food << endl;
     cout << "\n--> [Fitur PengeluaranKategori: Sedang dikerjakan oleh Anggota 3]\n";
 }
 
