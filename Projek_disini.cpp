@@ -45,7 +45,6 @@ void AddData(transaksi data[], int &n) {
     for (int i = 0; i < NUM_CAT; i++) {
         cout << "  " << i + 1 << ". " << CATEGORIES[i] << endl;
     }
-
     int pilih;
     while (true) {
         cout << "Pilih kategori [1-" << NUM_CAT << "]: ";
@@ -72,7 +71,6 @@ void AddData(transaksi data[], int &n) {
         t.ID += "0"; 
     }
     t.ID += to_string(urutan);
-
 
         // Input pengeluaran
     while (true) {
