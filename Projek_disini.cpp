@@ -115,6 +115,8 @@ void DisplayData(const transaksi data[], int n) {
 // --- BAGIAN ANGGOTA 3: Perhitungan Modular & Rekursif ---
 
 // Fungsi menghitung total, rata-rata, pengeluaran tertinggi, dan pengeluaran terendah
+int TotalRekursif(const transaksi data[], int n);
+
 void CalculateSummary(const transaksi data[], int n) {
     // TODO [Anggota 3]: Hitung total, mean, max, dan min pengeluaran
     int Total_Pengeluaran = TotalRekursif(data, n);
