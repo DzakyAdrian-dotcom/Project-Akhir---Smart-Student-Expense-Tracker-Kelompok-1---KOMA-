@@ -31,15 +31,89 @@ struct transaksi {
 // Fungsi menambah transaksi
 void AddData(transaksi data[], int &n) {
     // TODO [Anggota 2]: Masukkan data transaksi (ID, Kategori, Nominal Pengeluaran)
-    cout << "\n--> [Fitur AddData: Sedang dikerjakan oleh Anggota 2]\n";
+    
+    // Limitasi Jumlah Data Maksimum
+    if (n >= MAX_DATA) {
+        cout << "\n[!] Data penuh (maksimal " << MAX_DATA << " transaksi).\n";
+        return;
+    }
+    transaksi t; 
+    cout << "\n============ TAMBAH TRANSAKSI ============\n";
+
+    // Input ID
+    while (true) {
+        cout << "ID Transaksi (tanpa spasi): ";
+        cin >> t.ID;
+
+        bool duplikat = false;
+        for (int i = 0; i < n; i++) {
+            if (data[i].ID == t.ID) {
+                duplikat = true;
+                break;
+            }
+        }
+        if (duplikat) {
+            cout << "[!] ID sudah dipakai, gunakan ID lain.\n";
+        } else {
+            break;
+        }
+    }
+
+    // Input Kategori
+    cout << "======== Pilih Kategori ========" << endl;
+    for (int i = 0; i < NUM_CAT; i++) {
+        cout << "  " << i + 1 << ". " << CATEGORIES[i] << endl;
+    }
+    int pilih;
+    while (true) {
+        cout << "Pilih kategori [1-" << NUM_CAT << "]: ";
+        if (cin >> pilih && pilih >= 1 && pilih <= NUM_CAT) {
+            cin.ignore(1000, '\n');
+            break;
+        }
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "[!] Pilihan tidak valid.\n";
+    }
+    t.kategori = CATEGORIES[pilih - 1];
+
+        // 3. Input pengeluaran
+    while (true) {
+        cout << "Nominal pengeluaran (Rp): ";
+        if (cin >> t.pengeluaran && t.pengeluaran > 0) {
+            cin.ignore(1000, '\n');
+            break;
+        }
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "[!] Nominal harus berupa angka lebih dari 0.\n";
+    }
+    data[n] = t;
+    n++;
+    cout << "\n[OK] Transaksi berhasil ditambahkan.\n";
 }
 
 // Fungsi menampilkan data
 void DisplayData(const transaksi data[], int n) {
     // TODO [Anggota 2]: Tampilkan semua daftar transaksi yang tersimpan
-    cout << "\n--> [Fitur DisplayData: Sedang dikerjakan oleh Anggota 2]\n";
-}
+    if (n == 0) {
+        cout << "\n[!] Belum ada transaksi yang tersimpan.\n";
+        return;
+    }
 
+    cout << "\n==================== RIWAYAT TRANSAKSI ====================\n";
+    for (int i = 0; i < n; i++) {
+        cout << "TRANSAKSI NO: " << i+1 <<'\n';
+        cout << "ID: " << data[i].ID << '\n';
+        cout << "Kategori: " << data[i].kategori << '\n';
+        cout << "Pengeluaran: Rp " << data[i].pengeluaran << '\n';
+        if (i != n-1) {
+            cout << '\n'; 
+        }
+    }
+    cout << "-----------------------------------------------------------\n";
+    cout << "Jumlah transaksi: " << n << endl;
+}
 
 // --- BAGIAN ANGGOTA 3: Perhitungan Modular & Rekursif ---
 
