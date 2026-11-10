@@ -258,19 +258,14 @@ bool compareID(transaksi a, transaksi b){
 }
 
 void sortByNominal(transaksi data[], int n, int sort_direction){
-    transaksi after[n];//agar tidak bentrok
-    for(int i=0; i<n; i++){
-        after[i]=data[i];
-    }
-
     if(sort_direction==1){
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
-                if (after[j].pengeluaran > after[j + 1].pengeluaran) {
-                    swap(after[j], after[j+1]);
-                }else if(after[j].pengeluaran == after[j + 1].pengeluaran){
-                    if(compareID(after[j], after[j+1])){
-                        swap(after[j], after[j+1]);
+                if (data[j].pengeluaran > data[j + 1].pengeluaran) {
+                    swap(data[j], data[j+1]);
+                }else if(data[j].pengeluaran == data[j + 1].pengeluaran){
+                    if(compareID(data[j], data[j+1])){
+                        swap(data[j], data[j+1]);
                     }
                 }
             }
@@ -278,44 +273,36 @@ void sortByNominal(transaksi data[], int n, int sort_direction){
     }else{//descending
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
-                if (after[j].pengeluaran < after[j + 1].pengeluaran) {
-                    swap(after[j], after[j+1]);
-                }else if(after[j].pengeluaran == after[j + 1].pengeluaran){
-                    if(!compareID(after[j], after[j+1])){
-                        swap(after[j], after[j+1]);
+                if (data[j].pengeluaran < data[j + 1].pengeluaran) {
+                    swap(data[j], data[j+1]);
+                }else if(data[j].pengeluaran == data[j + 1].pengeluaran){
+                    if(!compareID(data[j], data[j+1])){
+                        swap(data[j], data[j+1]);
                     }
                 }
             }
         }
     }
-    DisplayData(after, n);
 }
 
 void SortByID(transaksi data[], int n, int sort_direction){
-    transaksi after[n];//agar tidak bentrok
-    for(int i=0; i<n; i++){
-        after[i]=data[i];
-    }
-
     if(sort_direction==1){
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
-                if(compareID(after[j], after[j+1])){
-                    swap(after[j], after[j+1]);
+                if(compareID(data[j], data[j+1])){
+                    swap(data[j], data[j+1]);
                 }
             }
         }
     }else{
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
-                if(!compareID(after[j], after[j+1])){
-                    swap(after[j], after[j+1]);
+                if(!compareID(data[j], data[j+1])){
+                    swap(data[j], data[j+1]);
                 }
             }
         }
     }
-    
-    DisplayData(after, n);
 }
 
 // Fungsi urutkan transaksi (Manual Bubble Sort / Selection Sort)
@@ -348,20 +335,55 @@ void UrutkanTransaksi(transaksi data[], int n) {
         UrutkanTransaksi(data, n);
     }
 
+    transaksi after[n];//agar tidak bentrok
+    for(int i=0; i<n; i++){
+        after[i]=data[i];
+    }
+
     switch (sort_type){
         case 1:
-            SortByID(data, n, sort_direction);
+            SortByID(after, n, sort_direction);
             break;
         case 2:
-            sortByNominal(data, n, sort_direction);
+            sortByNominal(after, n, sort_direction);
             break;
     }
+
+    DisplayData(after, n);
 }
 
 // Fungsi cari transaksi (Manual Linear Search)
-void CariTransaksi(const transaksi data[], int n) {
+void CariTransaksi(transaksi data[], int n) {
     // TODO [Anggota 4]: Implementasikan algoritma pencarian manual (by ID/Kategori)
-    cout << "\n--> [Fitur CariTransaksi: Sedang dikerjakan oleh Anggota 4]\n";
+    SortByID(data, n, 1);
+    transaksi founded_data[1];
+    //binary Search
+    cout << "Masukkan ID yang ingin dicari: ";
+    string target;
+    cin >> target;
+    founded_data[0].ID=target;
+    int left = 0;
+    int right = n - 1;
+    int mid;
+    bool found = false;
+    while (!found && (left <= right)) {
+        mid = left + (right - left) / 2;
+        if (data[mid].ID == target) {
+            found = true;
+        } else if (!compareID(data[mid], founded_data[0])) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    
+    if(found){
+        cout << "Data ditemukan! \n";
+        founded_data[0]=data[mid];
+        DisplayData(founded_data, 1);
+    }else{
+        cout << "Data tidak ditemukan! \n";
+    }
 }
 
 
