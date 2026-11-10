@@ -114,6 +114,14 @@ void DisplayData(const transaksi data[], int n) {
 
 // --- BAGIAN ANGGOTA 3: Perhitungan Modular & Rekursif ---
 
+// Fungsi pembantu menghitung total pengeluaran secara rekursif (Wajib Rekursi)
+int TotalRekursif(const transaksi data[], int n) {
+    // Base case: jika tidak ada data
+    if (n == 0) return 0;
+    // Recursive case: amount data terakhir + total data sebelumnya
+    return data[n - 1].pengeluaran + TotalRekursif(data, n - 1);
+}
+
 // Fungsi menghitung total, rata-rata, pengeluaran tertinggi, dan pengeluaran terendah
 void CalculateSummary(const transaksi data[], int n) {
     // TODO [Anggota 3]: Hitung total, mean, max, dan min pengeluaran
@@ -208,14 +216,6 @@ void PengeluaranKategori(const transaksi data[], int n) {
     // cout << "\n--> [Fitur PengeluaranKategori: Sedang dikerjakan oleh Anggota 3]\n";
 }
 
-// Fungsi pembantu menghitung total pengeluaran secara rekursif (Wajib Rekursi)
-int TotalRekursif(const transaksi data[], int n) {
-    // Base case: jika tidak ada data
-    if (n == 0) return 0;
-    // Recursive case: amount data terakhir + total data sebelumnya
-    return data[n - 1].pengeluaran + TotalRekursif(data, n - 1);
-}
-
 // Fungsi evaluasi status budget (safe <= 70%, warning 70%-90%, critical >= 90%)
 string StatusBudget(double total, double budget) {
     if (budget <= 0) return "UNKNOWN";
@@ -246,11 +246,116 @@ void MenuBudget(const transaksi data[], int n, int &budget) {
 
 
 // --- BAGIAN ANGGOTA 4: Algoritma Pengurutan & Pencarian Manual ---
+void compareID(), sortByNominal(), SortByID();
+bool compareID(transaksi a, transaksi b){
+    if (a.ID[0] > b.ID[0]) {
+        return true;
+    }else if (stoi(a.ID.substr(1)) > stoi(b.ID.substr(1))) {//compare angka
+        return true;
+    }else{
+        return false;
+    }
+}
+
+void sortByNominal(transaksi data[], int n, int sort_direction){
+    transaksi after[n];//agar tidak bentrok
+    for(int i=0; i<n; i++){
+        after[i]=data[i];
+    }
+
+    if(sort_direction==1){
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (after[j].pengeluaran > after[j + 1].pengeluaran) {
+                    swap(after[j], after[j+1]);
+                }else if(after[j].pengeluaran == after[j + 1].pengeluaran){
+                    if(compareID(after[j], after[j+1])){
+                        swap(after[j], after[j+1]);
+                    }
+                }
+            }
+        }
+    }else{//descending
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (after[j].pengeluaran < after[j + 1].pengeluaran) {
+                    swap(after[j], after[j+1]);
+                }else if(after[j].pengeluaran == after[j + 1].pengeluaran){
+                    if(!compareID(after[j], after[j+1])){
+                        swap(after[j], after[j+1]);
+                    }
+                }
+            }
+        }
+    }
+    DisplayData(after, n);
+}
+
+void SortByID(transaksi data[], int n, int sort_direction){
+    transaksi after[n];//agar tidak bentrok
+    for(int i=0; i<n; i++){
+        after[i]=data[i];
+    }
+
+    if(sort_direction==1){
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if(compareID(after[j], after[j+1])){
+                    swap(after[j], after[j+1]);
+                }
+            }
+        }
+    }else{
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if(!compareID(after[j], after[j+1])){
+                    swap(after[j], after[j+1]);
+                }
+            }
+        }
+    }
+    
+    DisplayData(after, n);
+}
 
 // Fungsi urutkan transaksi (Manual Bubble Sort / Selection Sort)
 void UrutkanTransaksi(transaksi data[], int n) {
     // TODO [Anggota 4]: Implementasikan algoritma sorting manual (by nominal/ID)
-    cout << "\n--> [Fitur UrutkanTransaksi: Sedang dikerjakan oleh Anggota 4]\n";
+    cout << "=========================================\n";
+    cout << "Urutkan Transaksi Berdasarkan: \n";
+    cout << "1. ID Transaksi \n";
+    cout << "2. Nominal Pengeluaran \n";
+    cout << "=========================================\n";
+    cout << "Pilih menu [1-2]: ";
+    int sort_type;
+    cin >> sort_type;
+
+    if((sort_type!=1)&&(sort_type!=2)){
+        cout << "Input tidak sesuai!";
+        UrutkanTransaksi(data, n);
+    }
+    
+    cout << "=========================================\n";
+    cout << "Arah pengurutan: \n";
+    cout << "1. Ascending \n2. Descending\n";
+    cout << "=========================================\n";
+    cout << "Pilih menu [1-2]: ";
+    int sort_direction;
+    cin >> sort_direction;
+
+    if((sort_direction!=1)&&(sort_direction!=2)){
+        cout << "Input tidak sesuai!";
+        UrutkanTransaksi(data, n);
+    }
+
+    switch (sort_type){
+        case 1:
+            SortByID(data, n, sort_direction);
+            break;
+        case 2:
+            sortByNominal(data, n, sort_direction);
+            break;
+    }
 }
 
 // Fungsi cari transaksi (Manual Linear Search)
